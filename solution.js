@@ -319,7 +319,7 @@ function polygonate(edges, points) {
       }
     }    
   }
-  console.log("polygonate: " + JSON.stringify(polygons));
+  //console.log("polygonate: " + JSON.stringify(polygons));
   return polygons;
 }
 
@@ -366,7 +366,7 @@ function filterPolygons(polygons, fig1, fig2, mode) {
       filtered.push(bigPolygons[i]);
     }
   }
-  console.log("filtered: " + JSON.stringify(filtered));
+  //console.log("filtered: " + JSON.stringify(filtered));
   return filtered;
 }
 
