@@ -34,7 +34,7 @@ function drawPath(data, container, color) {
   str += data.slice(1).map(function (point) {
     return 'L' + point.x + ',' + point.y;
   }).join(' ');
-  str += 'L' + data[0].x + ',' + data[0].y+' ';
+  str += ' L' + data[0].x + ',' + data[0].y+' ';
   path.setAttribute('d', str);
   path.style.fill = color;
   container.appendChild(path);
@@ -69,7 +69,17 @@ function drawDefault() {
 }
 
 function drawRandom() {
-  var polygons = getTwoRandomPolygons(10, 10);
+  var svg1 = document.querySelector('svg.base');
+  var base = svg1.getElementsByTagName('*');
+  for (i = base.length - 1; i >= 0; i--) {
+    svg1.removeChild(base[i]);
+  } 
+  var svg2 = document.querySelector('svg.intersections');
+  base = svg2.getElementsByTagName('*');
+  for (i = base.length - 1; i >= 0; i--) {
+    svg2.removeChild(base[i]);
+  } 
+  var polygons = getTwoRandomPolygons(5, 5);
   drawPolygons(polygons[0], polygons[1]);
 }
 
