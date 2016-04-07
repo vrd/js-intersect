@@ -79,7 +79,7 @@ function edgify(fig1, fig2) {
       }          
     }    
   }
-  console.log("edgify: " + JSON.stringify([secEdges, allPoints]));
+  //console.log("edgify: " + JSON.stringify([secEdges, allPoints]));
   return [secEdges, allPoints];
 }
 
@@ -245,7 +245,7 @@ function equalEdges(edge1, edge2) {
     return false;
   }
 }
-// 
+ 
 function polygonate(edges, points) {
   var polygons = [];
   var polygon = [];
@@ -384,8 +384,8 @@ function polygonArea(p) {
   var len = p.length;
   var s = 0;
   for (var i = 0; i < len; i++) {
-     s += Math.abs((p[i % len].x + p[(i + 1) % len].x)*(p[i % len].y - 
-      p[(i + 1) % len].y));
+     s += Math.abs((p[i % len].x * p[(i + 1) % len].y) - (p[i % len].y * 
+      p[(i + 1) % len].x));
   }
   return s/2;
 }
