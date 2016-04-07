@@ -1,0 +1,40 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  border: solid lightgray 3px;
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  right: 5%;
+  top: 10%;
+  
+}
+
+.container svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+svg.base path {
+  stroke: black;
+  stroke-width: 2px;
+  opacity: 0.5;
+}
+
+@keyframes blink {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+svg.intersections {
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
