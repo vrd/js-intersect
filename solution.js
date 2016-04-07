@@ -253,72 +253,71 @@ function polygonate(edges, points) {
   var allPoints = points;
   //start from every edge and create non-selfintersecting polygons
   for (var i = 0; i < len - 2; i++) {
-    polygon  = [];
     var org = {x: edges[i][0].x, y: edges[i][0].y};    
     var dest = {x: edges[i][1].x, y: edges[i][1].y};
     var currentEdge = i;
     var point;
     var p;
-    var direction = "clockwise";
-    var correct = false;
+    var direction;
+    var stop;
     //while we havn't come to the starting edge again
-    while ((polygon.length === 0) || (!correct)) {
+    for (direction = 0; direction < 2; direction++) {
+      polygon = [];
+      stop = false;
+      while ((polygon.length === 0) || (!stop)) {
       //add point to polygon
-      polygon.push({x: org.x, y: org.y});
-      point = undefined;
-      //look for edge connected with end of current edge
-      for (var j = 0; j < len; j++) {
-        p = undefined;
-        //except itself
-        if (!equalEdges(edges[j], edges[currentEdge])) {
-          //if some edge is connected to current edge in one endpoint
-          if ((edges[j][0].x === dest.x) && (edges[j][0].y === dest.y)) {
-            p = edges[j][1];
-          }
-          if ((edges[j][1].x === dest.x) && (edges[j][1].y === dest.y)) {
-            p = edges[j][0];
-          }
-          //compare it with last found connected edge for minimum angle between itself and current edge 
-          if (p) {
-            var classify = classifyPoint(p, [org, dest]);
-            //if this edge has smaller theta then last found edge update data of next edge of polygon
-            if (!point || 
-                ((classify.theta < point.theta) && (direction === "clockwise")) ||
-                ((classify.theta > point.theta) && (direction === "counterclockwise"))) {
-              point = {x: p.x, y: p.y, theta: classify.theta, edge: j};
+        polygon.push({x: org.x, y: org.y});
+        point = undefined;
+        //look for edge connected with end of current edge
+        for (var j = 0; j < len; j++) {
+          p = undefined;
+          //except itself
+          if (!equalEdges(edges[j], edges[currentEdge])) {
+            //if some edge is connected to current edge in one endpoint
+            if ((edges[j][0].x === dest.x) && (edges[j][0].y === dest.y)) {
+              p = edges[j][1];
+            }
+            if ((edges[j][1].x === dest.x) && (edges[j][1].y === dest.y)) {
+              p = edges[j][0];
+            }
+            //compare it with last found connected edge for minimum angle between itself and current edge 
+            if (p) {
+              var classify = classifyPoint(p, [org, dest]);
+              //if this edge has smaller theta then last found edge update data of next edge of polygon
+              if (!point || 
+                  ((classify.theta < point.theta) && (direction === 0)) ||
+                  ((classify.theta > point.theta) && (direction === 1))) {
+                point = {x: p.x, y: p.y, theta: classify.theta, edge: j};
+              }
             }
           }
         }
-      }
-      //change current edge to next edge
-      org.x = dest.x;
-      org.y = dest.y;
-      dest.x = point.x;
-      dest.y = point.y;
-      currentEdge = point.edge;
-      //if we reach start edge
-      if ((org.x == edges[i][0].x) &&
-          (org.y == edges[i][0].y) &&
-          (dest.x == edges[i][1].x) &&
-          (dest.y == edges[i][1].y)) {
-        //presume polygon is correct 
-        correct = true;
-        //but check this
-        for (var k = 0; k < allPoints.length; k++) {
-          //if some point is inside polygon it is incorrect
-          if ((!pointExists(allPoints[k], polygon)) && (findPointInsidePolygon(allPoints[k], polygon))) {
-            correct = false;
-            polygon = [];
-            direction = "counterclockwise";
-            break;
+        //change current edge to next edge
+        org.x = dest.x;
+        org.y = dest.y;
+        dest.x = point.x;
+        dest.y = point.y;
+        currentEdge = point.edge;
+        //if we reach start edge
+        if ((org.x == edges[i][0].x) &&
+            (org.y == edges[i][0].y) &&
+            (dest.x == edges[i][1].x) &&
+            (dest.y == edges[i][1].y)) {
+          stop = true;
+          //check polygon for correctness
+          for (var k = 0; k < allPoints.length; k++) {
+            //if some point is inside polygon it is incorrect
+            if ((!pointExists(allPoints[k], polygon)) && (findPointInsidePolygon(allPoints[k], polygon))) {
+              polygon = false;
+            }
           }
-        }
-      }   
-    }
-    //add created polygon if it was not found before
-    if (!polygonExists(polygon, polygons)) {
-      polygons.push(polygon);
-    }
+        }   
+      }
+      //add created polygon if it is correct and was not found before
+      if (polygon && !polygonExists(polygon, polygons)) {
+        polygons.push(polygon);
+      }
+    }    
   }
   console.log("polygonate: " + JSON.stringify(polygons));
   return polygons;

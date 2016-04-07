@@ -7,6 +7,7 @@
   <!-- подключаем стили Mocha, для отображения результатов -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.css">
   <link rel="stylesheet" href="test.css"> 
+  <title>Tests | Intersections in JS</title>
   <!-- подключаем библиотеку Mocha -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.js"></script>
   <!-- настраиваем Mocha: предстоит BDD-тестирование -->
@@ -37,6 +38,12 @@
   </div>
 
   <script>
+
+    var figs = [[{"x":79,"y":198},{"x":38,"y":262},{"x":16,"y":308},{"x":73,"y":323},{"x":226,"y":220}],[{"x":324,"y":239},{"x":373,"y":96},{"x":278,"y":333},{"x":19,"y":54},{"x":96,"y":365}]]
+
+    var fig1 = figs[0];
+    var fig2 = figs[1];
+
     function drawPath(data, container, color) {
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       var str = 'M' + data[0].x + ',' + data[0].y+' ';

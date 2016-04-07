@@ -13,7 +13,7 @@ var examples = {
     { x: 60,  y: 300 },
   ],
   second: [
-    { x: 300,  y: 240 },
+    { x: 30,  y: 240 },
     { x: 330, y: 220 },
     { x: 330, y: 210 },
     { x: 270, y: 90  },
@@ -28,6 +28,15 @@ var examples = {
 
 };
 
+
+
+drawPath(examples.first, document.querySelector('svg.base'), 'navy');
+drawPath(examples.second, document.querySelector('svg.base'), 'yellow');
+
+intersects(examples.first, examples.second).forEach(function (p) {
+  drawPath(p, document.querySelector('svg.intersections'), 'red');
+})
+
 function drawPath(data, container, color) {
   var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   var str = 'M' + data[0].x + ',' + data[0].y+' ';
@@ -40,37 +49,16 @@ function drawPath(data, container, color) {
   container.appendChild(path);
 }
 
-function drawPolygons(pol1, pol2) {
-  drawPath(pol1, document.querySelector('svg.base'), 'navy');
-  drawPath(pol2, document.querySelector('svg.base'), 'yellow');
-
-  intersects(pol1, pol2).forEach(function (p) {
-    drawPath(p, document.querySelector('svg.intersections'), 'red');
-  });
-}
-
 function getTwoRandomPolygons(num1, num2) {
-  var twoPolygons = [[],[]]; 
+  var twoPolygons = []; 
   var x, y;
   nums = [num1, num2];
   for (var i = 0; i < nums.length; i++) {
     for (var j = 0; j < nums[i]; j++) {
-      x = +(380*Math.random()).toPrecision(5) + 10;
-      y = +(380*Math.random()).toPrecision(5) + 10;
+      x = 380*Math.random() + 10;
+      y = 380*Math.random() + 10;
       twoPolygons[i].push({x: x, y: y});
     }
   }
-  log(twoPolygons);
   return twoPolygons;
 }
-
-function drawDefault() {
-  drawPolygons(examples.first, examples.second);
-}
-
-function drawRandom() {
-  var polygons = getTwoRandomPolygons(10, 10);
-  drawPolygons(polygons[0], polygons[1]);
-}
-
-
