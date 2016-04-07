@@ -1,7 +1,7 @@
 # js-intersect
 This is demo of polygons intersection algorithm written in JS. Visual part of project based on template provided by [kottans.org](http//kottans.org).
 Demo site is available via GitHub Pages here: [vrd.github.io/js-intersect] (http://vrd.github.io/js-intersect).
-Project consists of folowing files:
+Project consists of following files:
 - __index.html__ - main demo page 
 - __test.html__ - page with test results for checking algorithm correctness
 - __index.js__ - code for drawing polygons and calling intersects() function
