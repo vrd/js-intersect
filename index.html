@@ -7,11 +7,15 @@
   <title>Main | Intersections in JS</title>
 </head>
 <body>
+  <h1>
+    js-intersect demo
+  </h1>
+  <p>This is demo page for visualization of polygons intersection algorithm. Press "Draw random" button to see intersection of two random polygons.</p>
   <div class="container">
     <svg class="base"></svg>
     <svg class="intersections"></svg>
   </div>
-  <input type="button" id="draw" value="Draw random" onclick="return drawRandom()"/>
+  <input type="button" class="draw-button" value="Draw random" onclick="return drawRandom()"/>
   <script src="solution.js"></script>
   <script src="index.js"></script>
   <script type="text/javascript">

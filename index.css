@@ -38,3 +38,10 @@ svg.intersections {
   animation-duration: 1s;
   animation-iteration-count: infinite;
 }
+
+.draw-button {
+  position: absolute;
+  left: 50%;
+  top: 85%;
+  transform: translateX(-50%) translateY(-85%);
+}

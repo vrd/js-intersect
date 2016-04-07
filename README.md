@@ -1,2 +1,2 @@
 # js-intersect
-Add some text here...
+Add some text here..
