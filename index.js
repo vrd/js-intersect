@@ -55,8 +55,8 @@ function getTwoRandomPolygons(num1, num2) {
   nums = [num1, num2];
   for (var i = 0; i < nums.length; i++) {
     for (var j = 0; j < nums[i]; j++) {
-      x = +(380*Math.random()).toPrecision(5) + 10;
-      y = +(380*Math.random()).toPrecision(5) + 10;
+      x = Math.round(380*Math.random() + 10);
+      y = Math.round(380*Math.random() + 10);
       twoPolygons[i].push({x: x, y: y});
     }
   }
