@@ -36,13 +36,13 @@ polygons = [
   ],
   [
     {x: 200, y: 100},
-    {x: 350, y: 100},
-    {x: 350, y: 300},
-    {x: 200, y: 300},
-    {x: 200, y: 225},
-    {x: 300, y: 250},
+    {x: 200, y: 175},
     {x: 300, y: 150},
-    {x: 200, y: 175}
+    {x: 300, y: 250},
+    {x: 200, y: 225},
+    {x: 200, y: 300},
+    {x: 350, y: 300},
+    {x: 350, y: 100}
   ]
 ];
 
@@ -69,31 +69,31 @@ mesh = [
   ], 
   [
     {x: 200, y: 100},
-    {x: 350, y: 100}
-  ], 
-  [
-    {x: 350, y: 100},
-    {x: 350, y: 300}
-  ], 
-  [
-    {x: 350, y: 300},
-    {x: 200, y: 300}
-  ], 
-  [
-    {x: 200, y: 300},
-    {x: 200, y: 225}
-  ], 
-  [
-    {x: 200, y: 225},
     {x: 200, y: 175}
   ], 
   [
     {x: 200, y: 175},
+    {x: 200, y: 225}
+  ], 
+  [
+    {x: 200, y: 225},
+    {x: 200, y: 300}
+  ], 
+  [
+    {x: 200, y: 300},
+    {x: 350, y: 300}
+  ], 
+  [
+    {x: 350, y: 300},
+    {x: 350, y: 100}
+  ], 
+  [
+    {x: 350, y: 100},
     {x: 200, y: 100}
   ]        
 ];
 
-
+points = [fig1[0], {x: 200, y: 175}, fig1[1], fig1[2], {x: 200, y: 225}].concat(fig2);
 
 
 describe("intersects", function() {
@@ -108,8 +108,8 @@ describe("intersects", function() {
 
 describe("edgify", function() {
 
-  it("returns edges from polygons", function() {
-    assert.deepEqual(edgify(fig1, fig2), mesh);
+  it("returns edges and points from polygons", function() {
+    assert.deepEqual(edgify(fig1, fig2), [mesh, points]);
   });
 
 });
@@ -119,7 +119,7 @@ describe("edgify", function() {
 describe("polygonate", function() {
 
   it("returns nonintersecting polygons from edges", function() {
-    assert.deepEqual(polygonate(mesh), polygons);
+    assert.deepEqual(polygonate(mesh, points), polygons);
   });
 
 });
@@ -157,18 +157,18 @@ describe("getPointInsidePolygon", function() {
 
 });
 
-describe("invalidPolygons", function() {
+describe("checkPolygons", function() {
 
-  it("returns false if polygons are valid", function() {
-    assert.equal(invalidPolygons(fig1, fig2), false);
+  it("returns true if polygons are valid", function() {
+    assert.equal(checkPolygons(fig1, fig2), true);
   });
 
-  it("returns true if first polygon is invalid", function() {
-    assert.equal(invalidPolygons(fig1.slice(0, 2), fig2), true);
+  it("returns false if first polygon is invalid", function() {
+    assert.equal(checkPolygons(fig1.slice(0, 2), fig2), false);
   });
 
-  it("returns true if second polygon is invalid", function() {
-    assert.equal(invalidPolygons(fig1, fig2.slice(0, 2)), true);
+  it("returns false if second polygon is invalid", function() {
+    assert.equal(checkPolygons(fig1, fig2.slice(0, 2)), false);
   });
 
 });

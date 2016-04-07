@@ -28,7 +28,9 @@ function edgify(fig1, fig2) {
   var interPoints;
   var allPoints = [];
   var points;
+  var point;
   var p;
+  var edge;
   //check every edge
   for(var i = 0; i < primEdges.length; i++) {
     points = [];
@@ -57,26 +59,27 @@ function edgify(fig1, fig2) {
     points = sortPoints(points);
     //break edge to parts
     for (var k = 0; k < points.length - 1; k++) {
-      var part = [
+      edge = [
         { x: points[k].x, y: points[k].y },
         { x: points[k+1].x, y: points[k+1].y}
       ];
       // check for existanse in sec.array
-      if (!edgeExists(part, secEdges)) {
+      if (!edgeExists(edge, secEdges)) {
         //push if not exists
-        secEdges.push(part);
+        secEdges.push(edge);
       }          
     }
     //save points
     for (k = 0; k < points.length; k++) {
+      point = {x: points[k].x, y: points[k].y};
       // check for existanse in allPoints array
-      if (!pointExists(points[k], allPoints)) {
+      if (!pointExists(point, allPoints)) {
         //push if not exists
-        allPoints.push(points[k]);
+        allPoints.push(point);
       }          
     }    
   }
-  console.log("edgify: " + JSON.stringify(secEdges));
+  console.log("edgify: " + JSON.stringify([secEdges, allPoints]));
   return [secEdges, allPoints];
 }
 
