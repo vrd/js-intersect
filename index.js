@@ -60,7 +60,7 @@ function getTwoRandomPolygons(num1, num2) {
       twoPolygons[i].push({x: x, y: y});
     }
   }
-  log(twoPolygons);
+  //log(twoPolygons);
   return twoPolygons;
 }
 
