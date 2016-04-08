@@ -28,24 +28,22 @@ var examples = {
 
 };
 
-function drawPath(data, container, color) {
-  var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  var str = 'M' + data[0].x + ',' + data[0].y+' ';
-  str += data.slice(1).map(function (point) {
-    return 'L' + point.x + ',' + point.y;
+function drawPolygon(data, container, color) {
+  var pol = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  var str = '';
+  str += data.map(function (point) {
+    return point.x + ',' + point.y;
   }).join(' ');
-  str += ' L' + data[0].x + ',' + data[0].y+' ';
-  path.setAttribute('d', str);
-  path.style.fill = color;
-  container.appendChild(path);
+  pol.setAttribute('points', str);
+  pol.style.fill = color;
+  container.appendChild(pol);
 }
 
-function drawPolygons(pol1, pol2) {
-  drawPath(pol1, document.querySelector('svg.base'), 'navy');
-  drawPath(pol2, document.querySelector('svg.base'), 'yellow');
-
+function drawAllPolygons(pol1, pol2) {
+  drawPolygon(pol1, document.querySelector('svg.base'), 'navy');
+  drawPolygon(pol2, document.querySelector('svg.base'), 'yellow');
   intersects(pol1, pol2).forEach(function (p) {
-    drawPath(p, document.querySelector('svg.intersections'), 'red');
+    drawPolygon(p, document.querySelector('svg.intersections'), 'red');
   });
 }
 
@@ -65,7 +63,7 @@ function getTwoRandomPolygons(num1, num2) {
 }
 
 function drawDefault() {
-  drawPolygons(examples.first, examples.second);
+  drawAllPolygons(examples.first, examples.second);
 }
 
 function drawRandom() {
@@ -80,7 +78,7 @@ function drawRandom() {
     svg2.removeChild(base[i]);
   } 
   var polygons = getTwoRandomPolygons(5, 5);
-  drawPolygons(polygons[0], polygons[1]);
+  drawAllPolygons(polygons[0], polygons[1]);
 }
 
 
