@@ -11,8 +11,6 @@ fig2 = [
   { x: 350, y: 100  }
 ];
 
-
-
 edges = [
   [
     { x: 100, y: 200  },
@@ -266,6 +264,13 @@ describe("classifyPoint", function() {
   });
   it("point is between", function() {
     assert.deepEqual(classifyPoint({x: 4, y: 4}, [{x: 3, y: 3}, {x: 5, y: 5}]), {loc: "BETWEEN", t: 0.5});
+  });
+});
+
+describe("getMidpoints", function() {
+  it("returns midpoints of edges", function() {
+    assert.deepEqual(getMidpoints([[{x: 3, y: 3}, {x: 5, y: 5}], [{x: -1, y: 2}, {x: 0, y: 4}]]),
+     [{x: 4, y: 4}, {x: -0.5, y: 3}]);
   });
 });
 

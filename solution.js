@@ -166,10 +166,10 @@ function classifyPoint(p, edge) {
   if (theta < 0) {
     theta = theta + 360;
   } 
-  if (sa < 0) {    
+  if (sa < -0.0000000001) {    
     return {loc: "LEFT", theta: theta};
   }
-  if (sa > 0) {    
+  if (sa > 0.00000000001) {    
     return {loc: "RIGHT", theta: theta};
   }
   if (((ax * bx) < 0) || ((ay * by) < 0)) {
@@ -251,6 +251,7 @@ function polygonate(edges, points) {
   var polygon = [];
   var len = edges.length;
   var allPoints = points;
+  var midpoints = getMidpoints(edges);
   //start from every edge and create non-selfintersecting polygons
   for (var i = 0; i < len - 2; i++) {
     var org = {x: edges[i][0].x, y: edges[i][0].y};    
@@ -308,6 +309,12 @@ function polygonate(edges, points) {
           for (var k = 0; k < allPoints.length; k++) {
             //if some point is inside polygon it is incorrect
             if ((!pointExists(allPoints[k], polygon)) && (findPointInsidePolygon(allPoints[k], polygon))) {
+              polygon = false;
+            }
+          }
+          for (k = 0; k < midpoints.length; k++) {
+            //if some midpoint is inside polygon (edge inside polygon) it is incorrect
+            if (findPointInsidePolygon(midpoints[k], polygon)) {
               polygon = false;
             }
           }
@@ -468,14 +475,26 @@ function findPointInsidePolygon(point, polygon) {
             (dest.y < point.y)
           )
         ) {
-      cross++;
+      cross++;    
     }
+    if (classify.loc === "BETWEEN") return false;
   }
   if (cross % 2) {
     return true;
   } else {
     return false;
   }
+}
+
+function getMidpoints(edges) {
+  var midpoints = [];
+  var x, y;
+  for (var i = 0; i < edges.length; i++) {
+    x = (edges[i][0].x + edges[i][1].x) / 2;
+    y = (edges[i][0].y + edges[i][1].y) / 2;
+    midpoints.push({x: x, y: y}); 
+  }
+  return midpoints;
 }
   
 function log(obj) {
