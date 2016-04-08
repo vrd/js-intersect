@@ -3,6 +3,10 @@ html, body {
   height: 100%;
 }
 
+p {
+  max-width: 700px;
+}
+
 .container {
   border: solid lightgray 3px;
   width: 400px;
@@ -40,9 +44,11 @@ svg.intersections {
   animation-iteration-count: infinite;
 }
 
-.draw-button {
+.control {
   position: absolute;
   left: 50%;
-  top: 85%;
+  top: 85%;  
   transform: translateX(-50%) translateY(-85%);
+  text-align:center;
 }
+

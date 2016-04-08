@@ -76,9 +76,20 @@ function drawRandom() {
   base = svg2.getElementsByTagName('*');
   for (i = base.length - 1; i >= 0; i--) {
     svg2.removeChild(base[i]);
-  } 
-  var polygons = getTwoRandomPolygons(5, 5);
+  }
+  const MAX = 100;
+  const MIN = 3; 
+  var pol1 = document.getElementById('pol1');
+  pol1.value = Math.round(pol1.value);
+  if (pol1.value > MAX) pol1.value = MAX;
+  if (pol1.value < MIN) pol1.value = MIN;
+  var pol2 = document.getElementById('pol2');
+  pol2.value = Math.round(pol2.value);
+  if (pol2.value > MAX) pol2.value = MAX;
+  if (pol2.value < MIN) pol2.value = MIN;
+  var polygons = getTwoRandomPolygons(pol1.value, pol2.value);
   drawAllPolygons(polygons[0], polygons[1]);
+  
 }
 
 

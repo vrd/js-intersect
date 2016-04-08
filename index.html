@@ -10,13 +10,19 @@
   <h1>
     js-intersect demo
   </h1>
-  <p>This is demo page for visualization of polygons intersection algorithm. Press "Draw random" button to see intersection of two random polygons.</p>
+  <p>This is demo page for visualization of polygons intersection algorithm. Press "Draw random" button to see intersection of two random polygons. You can change points number of random polygons from 3 to 100 (if polygons contain many points processing may take some time).</p>
   <a href="test.html">test results</a>
   <div class="container">
     <svg class="base"></svg>
     <svg class="intersections"></svg>
   </div>
-  <input type="button" class="draw-button" value="Draw random" onclick="return drawRandom()"/>
+  <div class="control">First polygon: &nbsp;  
+    <input type="number" id="pol1" min="3" max="100" value="5"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;Second polygon:&nbsp;  
+    <input type="number" id="pol2" min="3" max="100" value="5"/>
+    <br/> <br/>
+    <input type="button" class="draw-button" value="Draw random" onclick="return drawRandom()"/>
+  </div>  
   <script src="solution.js"></script>
   <script src="index.js"></script>
   <script type="text/javascript">
