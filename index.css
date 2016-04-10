@@ -47,8 +47,8 @@ svg.intersections {
 .control {
   position: absolute;
   left: 50%;
-  top: 85%;  
-  transform: translateX(-50%) translateY(-85%);
+  top: 90%;  
+  transform: translateX(-50%) translateY(-90%);
   text-align:center;
 }
 
