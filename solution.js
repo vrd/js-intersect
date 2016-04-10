@@ -306,12 +306,12 @@ function polygonate(edges, points) {
             (dest.y == edges[i][1].y)) {
           stop = true;
           //check polygon for correctness
-          for (var k = 0; k < allPoints.length; k++) {
+          /*for (var k = 0; k < allPoints.length; k++) {
             //if some point is inside polygon it is incorrect
             if ((!pointExists(allPoints[k], polygon)) && (findPointInsidePolygon(allPoints[k], polygon))) {
               polygon = false;
             }
-          }
+          }*/
           for (k = 0; k < midpoints.length; k++) {
             //if some midpoint is inside polygon (edge inside polygon) it is incorrect
             if (findPointInsidePolygon(midpoints[k], polygon)) {
