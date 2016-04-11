@@ -1,4 +1,4 @@
-function intersects(fig1, fig2) {
+function intersect(fig1, fig2) {
   if (!checkPolygons(fig1, fig2)) {
     return false;
   }

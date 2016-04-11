@@ -42,7 +42,7 @@ function drawPolygon(data, container, color) {
 function drawAllPolygons(pol1, pol2) {
   drawPolygon(pol1, document.querySelector('svg.base'), 'navy');
   drawPolygon(pol2, document.querySelector('svg.base'), 'yellow');
-  intersects(pol1, pol2).forEach(function (p) {
+  intersect(pol1, pol2).forEach(function (p) {
     drawPolygon(p, document.querySelector('svg.intersections'), 'red');
   });
 }
