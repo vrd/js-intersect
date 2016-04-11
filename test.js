@@ -102,9 +102,9 @@ mesh = [
 points = [fig1[0], {x: 200, y: 175}, fig1[1], fig1[2], {x: 200, y: 225}].concat(fig2);
 
 
-describe("intersects", function() {
+describe("intersect", function() {
   it("returns polygons intersection", function() {
-    assert.deepEqual(intersects(fig1, fig2), [polygons[1]]);
+    assert.deepEqual(intersect(fig1, fig2), [polygons[1]]);
   });
 });
 
