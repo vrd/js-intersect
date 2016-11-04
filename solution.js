@@ -406,7 +406,7 @@ function getPointInsidePolygon(polygon) {
   var interPoints = [];
   var pointsOK = false;
   while (!pointsOK) {
-    line = [{x: -50, y: y},{x: 450, y: y}];
+    line = [{x: (size.x.min - 1), y: y},{x: (size.x.max + 1), y: y}];
     //find intersections with all polygon edges
     for (var i = 0; i < edges.length; i++) {
       points = findEdgeIntersection(line, edges[i]);
