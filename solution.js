@@ -142,8 +142,14 @@ function findEdgeIntersection(edge1, edge2) {
     }       
   //3. edges intersect
   } else {
+    for (var i = 0; i < 2; i++) {
+      var classify = classifyPoint(edge2[i], edge1);
+      if (classify.loc == "ORIGIN" || classify.loc == "DESTINATION") {
+        return false;
+      }
+    }
     x = +((x1 + t1*(x2 - x1)).toPrecision(10));
-    y = +((y1 + t1*(y2 - y1)).toPrecision(10))
+    y = +((y1 + t1*(y2 - y1)).toPrecision(10));
     interPoints.push({x: x, y: y, t: t1});
     return interPoints;
   }
@@ -498,8 +504,3 @@ function getMidpoints(edges) {
 function log(obj) {
   console.log(JSON.stringify(obj));
 }
-
-
-
-  
-
