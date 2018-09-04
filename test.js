@@ -33,9 +33,46 @@ fig2 = [
 //   { x: 10.143593539448977, y: 45.856406460551014 }
 // ];
 // fig2 = [
-//   { x: 37.856406460551014, y: 18.143593539448986  },
+//   { x: 37.856406460551014, y: 18.14359353944898  },
 //   { x: 10.143593539448977, y:  2.143593539448986 },
 //   { x: 21.85640646055102,  y: 45.856406460551014 }
+// ];
+
+//test #1 from @Skeptron
+// var fig1 = [
+//   {x: 1000, y: 800},
+//   {x: 800, y: 500},
+//   {x: 600, y: 500},
+//   {x: 474, y: 800},
+//   {x: 1000, y: 800}
+// ];
+
+// var fig2 = [
+//   {x: 1000, y: 400},
+//   {x: 400, y: 200},
+//   {x: 200, y: 200},
+//   {x: 200, y: 300},
+//   {x: 449, y: 800},
+//   {x: 1000, y: 800}
+// ];
+
+//test #2 from @Skeptron
+// fig1 = [
+//   {x: 926, y: 0},
+//   {x: 600, y: 500},
+//   {x: 600, y: 600},
+//   {x: 799, y: 600},
+//   {x: 1000, y: 559},
+//   {x: 1000, y: 0}
+// ];
+
+// fig2 = [
+//   {x: 1000, y: 400},
+//   {x: 400, y: 200},
+//   {x: 200, y: 200},
+//   {x: 200, y: 300},
+//   {x: 449, y: 800},
+//   {x: 1000, y: 800}
 // ];
 
 edges = [
@@ -126,8 +163,6 @@ mesh = [
   ]        
 ];
 
-points = [fig1[0], {x: 200, y: 175}, fig1[1], fig1[2], {x: 200, y: 225}].concat(fig2);
-
 
 describe("intersect", function() {
   it("returns polygons intersection", function() {
@@ -137,13 +172,13 @@ describe("intersect", function() {
 
 describe("edgify", function() {
   it("returns edges and points from polygons", function() {
-    assert.deepEqual(edgify(fig1, fig2), [mesh, points]);
+    assert.deepEqual(edgify(fig1, fig2), mesh);
   });
 });
 
 describe("polygonate", function() {
   it("returns nonintersecting polygons from edges", function() {
-    assert.deepEqual(polygonate(mesh, points), polygons);
+    assert.deepEqual(polygonate(mesh), polygons);
   });
 });
 
@@ -196,15 +231,15 @@ describe("getSize", function() {
   });
 });
 
-describe("getPointInsidePolygon", function() {
+// describe("getPointInsidePolygon", function() {
 
-  it("returns point located inside polygon 1", function() {
-    assert.deepEqual(getPointInsidePolygon(fig1), {x: 200, y: 200});
-  });
-  it("returns point located inside polygon 2", function() {
-    assert.deepEqual(getPointInsidePolygon(fig2), {x: 275, y: 200});
-  });
-});
+//   it("returns point located inside polygon 1", function() {
+//     assert.deepEqual(getPointInsidePolygon(fig1), {x: 200, y: 200});
+//   });
+//   it("returns point located inside polygon 2", function() {
+//     assert.deepEqual(getPointInsidePolygon(fig2), {x: 275, y: 200});
+//   });
+// });
 
 describe("checkPolygons", function() {
   it("returns true if polygons are valid", function() {

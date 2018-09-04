@@ -1,11 +1,28 @@
 function intersect(fig1, fig2) {
-  if (!checkPolygons(fig1, fig2)) {
+  fig2a = alignPolygon(fig2, fig1);
+  if (!checkPolygons(fig1, fig2a)) {
     return false;
   }
-  var [edges, points] = edgify(fig1, fig2);
-  var polygons = polygonate(edges, points);
-  var filteredPolygons = filterPolygons(polygons, fig1, fig2, "intersect");
+  var edges = edgify(fig1, fig2a);
+  var polygons = polygonate(edges);
+  var filteredPolygons = filterPolygons(polygons, fig1, fig2a, "intersect");
   return filteredPolygons;
+}
+
+function alignPolygon(polygon, points) {
+  for (let i = 0; i < polygon.length; i++) {
+    for (let j = 0; j < points.length; j++) {
+      if (distance(polygon[i], points[j]) < 0.00000001)
+      polygon[i] = points[j];
+    }    
+  }
+  return polygon;
+}
+
+function distance(p1, p2) {
+  var dx = Math.abs(p1.x - p2.x);
+  var dy = Math.abs(p1.y - p2.y);
+  return Math.sqrt(dx*dx + dy*dy);
 }
 
 //check polygons for correctness
@@ -24,42 +41,28 @@ function checkPolygons(fig1, fig2) {
 function edgify(fig1, fig2) {
   //create primary array from all edges
   var primEdges = getEdges(fig1).concat(getEdges(fig2));
-  var secEdges = [];
-  var interPoints;
-  var allPoints = [];
-  var points;
-  var point;
-  var p;
-  var edge;
+  var secEdges = [];  
   //check every edge
   for(var i = 0; i < primEdges.length; i++) {
-    points = [];
+    var points = [];
     //for intersection with every edge except itself
     for(var j = 0; j < primEdges.length; j++) {
-      if (i == j) continue;
-      interPoints = findEdgeIntersection(primEdges[i], primEdges[j]);
-      //if intersections found (array but not false returned)
-      if (interPoints) {
-        //check for uniqueness
-        for (var k = 0; k < interPoints.length; k++) {
-          if (!pointExists(interPoints[k], points)) {
-            //and push to array
-            points.push(interPoints[k]);
-          }
-        }                   
+      if (i != j) {
+        var interPoints = findEdgeIntersection(primEdges[i], primEdges[j]);
+        addNewPoints(interPoints, points);        
       }
     }
-    p = primEdges[i][0];
-    p.t = 0;
-    points.push(p);
-    p = primEdges[i][1];
-    p.t = 1;
-    points.push(p);
+    //add start and end points to intersection points
+    startPoint = primEdges[i][0];
+    startPoint.t = 0;
+    endPoint = primEdges[i][1];
+    endPoint.t = 1;
+    addNewPoints([startPoint, endPoint], points);
     //sort all points by position on edge
     points = sortPoints(points);
     //break edge to parts
     for (var k = 0; k < points.length - 1; k++) {
-      edge = [
+      var edge = [
         { x: points[k].x, y: points[k].y },
         { x: points[k+1].x, y: points[k+1].y}
       ];
@@ -68,19 +71,20 @@ function edgify(fig1, fig2) {
         //push if not exists
         secEdges.push(edge);
       }          
-    }
-    //save points
-    for (k = 0; k < points.length; k++) {
-      point = {x: points[k].x, y: points[k].y};
-      // check for existanse in allPoints array
-      if (!pointExists(point, allPoints)) {
-        //push if not exists
-        allPoints.push(point);
-      }          
     }    
-  }
-  //console.log("edgify: " + JSON.stringify([secEdges, allPoints]));
-  return [secEdges, allPoints];
+  }  
+  return secEdges;
+}
+
+function addNewPoints(newPoints, points) {
+  if (newPoints.length > 0) {
+    //check for uniqueness
+    for (var k = 0; k < newPoints.length; k++) {      
+      if (!pointExists(newPoints[k], points)) {        
+        points.push(newPoints[k]);
+      }
+    }                   
+  }   
 }
 
 function sortPoints(points) {
@@ -96,8 +100,10 @@ function getEdges(fig) {
   var edges = [];
   var len = fig.length;
   for (var i = 0; i < len; i++) {
-    edges.push([{x: fig[(i % len)].x, y: fig[(i % len)].y}, {x: fig[((i+1) % len)].x,
-      y: fig[((i+1) % len)].y}]);
+    edges.push([
+      {x: fig[(i % len)].x, y: fig[(i % len)].y},
+      {x: fig[((i+1) % len)].x, y: fig[((i+1) % len)].y}
+    ]);
   }
   return edges;
 }
@@ -117,42 +123,44 @@ function findEdgeIntersection(edge1, edge2) {
   var t1 = nom1 / denom;
   var t2 = nom2 / denom;
   var interPoints = [];
-  var x, y;
   //1. lines are parallel or edges don't intersect 
-  if (((denom === 0) && (nom1 !== 0)) || (t1 <= 0) || (t1 >= 1) || 
-      (t2 < 0 ) || (t2 > 1)) {
-    return false;
-  //2. lines are collinear  
-  } else if ((nom1 === 0) && (denom === 0)) {
+  if (((denom === 0) && (nom1 !== 0)) || (t1 <= 0) || (t1 >= 1) || (t2 < 0 ) || (t2 > 1)) {
+    return interPoints;   
+  }
+  //2. lines are collinear 
+  else if ((nom1 === 0) && (denom === 0)) {
     //check if endpoints of edge2 lies on edge1
     for (var i = 0; i < 2; i++) {
       var classify = classifyPoint(edge2[i], edge1);
       //find position of this endpoints relatively to edge1
-      if (classify.loc == "BETWEEN") {
+      if (classify.loc == "ORIGIN" || classify.loc == "DESTINATION") {
+        interPoints.push({x: edge2[i].x, y: edge2[i].y, t: classify.t});
+      }
+      else if (classify.loc == "BETWEEN") {
         x = +((x1 + classify.t*(x2 - x1)).toPrecision(10));
         y = +((y1 + classify.t*(y2 - y1)).toPrecision(10));
         interPoints.push({x: x, y: y, t: classify.t});
       }
-    }
-    //return positions of endpoints
-    if (interPoints.length > 0) {
-      return interPoints;  
-    } else {
-      return false;
-    }       
+    }    
+    return interPoints; 
+  }
   //3. edges intersect
-  } else {
+  else {
     for (var i = 0; i < 2; i++) {
       var classify = classifyPoint(edge2[i], edge1);
       if (classify.loc == "ORIGIN" || classify.loc == "DESTINATION") {
-        return false;
+        interPoints.push({x: edge2[i].x, y: edge2[i].y, t: classify.t});
       }
     }
-    x = +((x1 + t1*(x2 - x1)).toPrecision(10));
-    y = +((y1 + t1*(y2 - y1)).toPrecision(10));
+    if (interPoints.length > 0) {
+      return interPoints;  
+    }
+    var x = +((x1 + t1*(x2 - x1)).toPrecision(10));
+    var y = +((y1 + t1*(y2 - y1)).toPrecision(10));
     interPoints.push({x: x, y: y, t: t1});
     return interPoints;
   }
+  return interPoints;
 }
 
 function classifyPoint(p, edge) {
@@ -162,10 +170,10 @@ function classifyPoint(p, edge) {
   var by = p.y - edge[0].y;
   var sa = ax * by - bx * ay;
   if ((p.x === edge[0].x) && (p.y === edge[0].y)) {
-    return {loc: "ORIGIN"};
+    return {loc: "ORIGIN", t: 0};
   }
   if ((p.x === edge[1].x) && (p.y === edge[1].y)) {
-    return {loc: "DESTINATION"};
+    return {loc: "DESTINATION", t: 1};
   }
   var theta = (polarAngle([edge[1], edge[0]]) - 
     polarAngle([{x: edge[1].x, y: edge[1].y}, {x: p.x, y: p.y}])) % 360;
@@ -252,11 +260,10 @@ function equalEdges(edge1, edge2) {
   }
 }
  
-function polygonate(edges, points) {
+function polygonate(edges) {
   var polygons = [];
   var polygon = [];
   var len = edges.length;
-  var allPoints = points;
   var midpoints = getMidpoints(edges);
   //start from every edge and create non-selfintersecting polygons
   for (var i = 0; i < len - 2; i++) {
@@ -405,8 +412,8 @@ function getPointInsidePolygon(polygon) {
   var point;
   var size = getSize(polygon);
   var edges = getEdges(polygon);
-  var y = (size.y.max + size.y.min) / 2;
-  var dy = (size.y.max - size.y.min) / 17;
+  var y = size.y.min + (size.y.max - size.y.min) / Math.PI;
+  var dy = (size.y.max - size.y.min) / 13;
   var line = [];
   var points;
   var interPoints = [];
@@ -504,3 +511,35 @@ function getMidpoints(edges) {
 function log(obj) {
   console.log(JSON.stringify(obj));
 }
+
+
+// fig1 = [
+//   { x:  5.35328472172063, y:  3.3464605876540254 },
+//   { x: 31.10025450900146, y:  3.3464605876540254 },
+//   { x: 31.10025450900146, y: 38.65353941234598   },
+//   { x:  5.35328472172063, y: 38.65353941234598   }
+// ];
+// fig2 = [
+//   { x: 31.10025450900146, y: 6.964961212615723  },
+//   { x:  5.35328472172063, y: 3.3464605876540254 },
+//   { x: 26.64671527827937, y: 38.65353941234598  }
+// ];
+
+//default test
+// fig1 = [
+//   { x: 100, y: 200  },
+//   { x: 300, y: 150  },
+//   { x: 300, y: 250  }
+// ];
+
+// fig2 = [
+//   { x: 200, y: 100  },
+//   { x: 200, y: 300  },
+//   { x: 350, y: 300  },
+//   { x: 350, y: 100  }
+// ];
+
+console.log("DEBUG STARTED");
+var result = intersect(fig1, fig2);
+log(result);
+console.log("DEBUG STOPPED");
