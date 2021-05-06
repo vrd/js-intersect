@@ -137,8 +137,8 @@ function findEdgeIntersection(edge1, edge2) {
         interPoints.push({x: edge2[i].x, y: edge2[i].y, t: classify.t});
       }
       else if (classify.loc == "BETWEEN") {
-        x = +((x1 + classify.t*(x2 - x1)).toPrecision(10));
-        y = +((y1 + classify.t*(y2 - y1)).toPrecision(10));
+        x = +((x1 + classify.t*(x2 - x1)).toPrecision(9));
+        y = +((y1 + classify.t*(y2 - y1)).toPrecision(9));
         interPoints.push({x: x, y: y, t: classify.t});
       }
     }    
@@ -155,8 +155,8 @@ function findEdgeIntersection(edge1, edge2) {
     if (interPoints.length > 0) {
       return interPoints;  
     }
-    var x = +((x1 + t1*(x2 - x1)).toPrecision(10));
-    var y = +((y1 + t1*(y2 - y1)).toPrecision(10));
+    var x = +((x1 + t1*(x2 - x1)).toPrecision(9));
+    var y = +((y1 + t1*(y2 - y1)).toPrecision(9));
     interPoints.push({x: x, y: y, t: t1});
     return interPoints;
   }
@@ -180,10 +180,10 @@ function classifyPoint(p, edge) {
   if (theta < 0) {
     theta = theta + 360;
   } 
-  if (sa < -0.0000000001) {    
+  if (sa < -0.000000001) {    
     return {loc: "LEFT", theta: theta};
   }
-  if (sa > 0.00000000001) {    
+  if (sa > 0.000000001) {    
     return {loc: "RIGHT", theta: theta};
   }
   if (((ax * bx) < 0) || ((ay * by) < 0)) {
