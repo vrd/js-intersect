@@ -187,10 +187,10 @@ function classifyPoint(p, edge) {
     return {loc: "RIGHT", theta: theta};
   }
   if (((ax * bx) < 0) || ((ay * by) < 0)) {
-    return {loc: "BEHIND", theta: 0};
+    return {loc: "BEHIND", theta: theta};
   }
   if ((Math.sqrt(ax * ax + ay * ay)) < (Math.sqrt(bx * bx + by * by))) {
-    return {loc: "BEYOND", theta: 180};
+    return {loc: "BEYOND", theta: theta};
   }
   var t;
   if (ax !== 0) {
@@ -313,10 +313,7 @@ function polygonate(edges) {
         dest.y = point.y;
         currentEdge = point.edge;
         //if we reach start edge
-        if ((org.x == edges[i][0].x) &&
-            (org.y == edges[i][0].y) &&
-            (dest.x == edges[i][1].x) &&
-            (dest.y == edges[i][1].y)) {
+        if (equalEdges([org, dest], edges[i])) {
           stop = true;
           //check polygon for correctness
           /*for (var k = 0; k < allPoints.length; k++) {
