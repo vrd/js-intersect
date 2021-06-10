@@ -525,7 +525,7 @@ function log(obj) {
 //   { x: 26.64671527827937, y: 38.65353941234598  }
 // ];
 
-//default test
+// default test
 // fig1 = [
 //   { x: 100, y: 200  },
 //   { x: 300, y: 150  },
@@ -539,7 +539,7 @@ function log(obj) {
 //   { x: 350, y: 100  }
 // ];
 
-console.log("DEBUG STARTED");
-var result = intersect(fig1, fig2);
-log(result);
-console.log("DEBUG STOPPED");
+// console.log("DEBUG STARTED");
+// var result = intersect(fig1, fig2);
+// log(result);
+// console.log("DEBUG STOPPED");
