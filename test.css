@@ -5,11 +5,11 @@ html, body {
 
 .container {
   border: solid lightgray 3px;
-  width: 1000px;
-  height: 1000px;
+  width: 500px;
+  height: 500px;
   position: absolute;
   right: 5%;
-  top: 10%;
+  top: 5%;
   
 }
 

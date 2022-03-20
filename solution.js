@@ -1,5 +1,13 @@
 function intersect(fig1, fig2) {
-  fig2a = alignPolygon(fig2, fig1);
+  for (let i = 0; i < fig1.length; i++) {
+    fig1[i].x = +((fig1[i].x).toFixed(9));
+    fig1[i].y = +((fig1[i].y).toFixed(9));
+  }
+  for (let i = 0; i < fig2.length; i++) {
+    fig2[i].x = +((fig2[i].x).toFixed(9));
+    fig2[i].y = +((fig2[i].y).toFixed(9));
+  }
+  var fig2a = alignPolygon(fig2, fig1);
   if (!checkPolygons(fig1, fig2a)) {
     return false;
   }
@@ -34,7 +42,7 @@ function checkPolygons(fig1, fig2) {
       return false; 
     } 
   }
-  return true;  
+  return true; 
 }
 
 //create array of edges of all polygons
@@ -137,8 +145,8 @@ function findEdgeIntersection(edge1, edge2) {
         interPoints.push({x: edge2[i].x, y: edge2[i].y, t: classify.t});
       }
       else if (classify.loc == "BETWEEN") {
-        x = +((x1 + classify.t*(x2 - x1)).toPrecision(9));
-        y = +((y1 + classify.t*(y2 - y1)).toPrecision(9));
+        x = +((x1 + classify.t*(x2 - x1)).toFixed(9));
+        y = +((y1 + classify.t*(y2 - y1)).toFixed(9));
         interPoints.push({x: x, y: y, t: classify.t});
       }
     }    
@@ -155,12 +163,11 @@ function findEdgeIntersection(edge1, edge2) {
     if (interPoints.length > 0) {
       return interPoints;  
     }
-    var x = +((x1 + t1*(x2 - x1)).toPrecision(9));
-    var y = +((y1 + t1*(y2 - y1)).toPrecision(9));
+    var x = +((x1 + t1*(x2 - x1)).toFixed(9));
+    var y = +((y1 + t1*(y2 - y1)).toFixed(9));
     interPoints.push({x: x, y: y, t: t1});
     return interPoints;
   }
-  return interPoints;
 }
 
 function classifyPoint(p, edge) {
@@ -500,6 +507,10 @@ function getMidpoints(edges) {
   for (var i = 0; i < edges.length; i++) {
     x = (edges[i][0].x + edges[i][1].x) / 2;
     y = (edges[i][0].y + edges[i][1].y) / 2;
+    classify = classifyPoint({x: x, y:y}, edges[i]);
+    if (classify.loc != "BETWEEN") {
+      console.error("Midpoint calculation error");
+    }
     midpoints.push({x: x, y: y}); 
   }
   return midpoints;
