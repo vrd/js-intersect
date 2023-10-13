@@ -406,10 +406,10 @@ function polygonArea(p) {
   var len = p.length;
   var s = 0;
   for (var i = 0; i < len; i++) {
-     s += Math.abs((p[i % len].x * p[(i + 1) % len].y) - (p[i % len].y * 
-      p[(i + 1) % len].x));
+     s += (p[i % len].x * p[(i + 1) % len].y) - (p[i % len].y * 
+      p[(i + 1) % len].x);
   }
-  return s/2;
+  return Math.abs(s/2);
 }
 
 function getPointInsidePolygon(polygon) {
