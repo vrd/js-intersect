@@ -383,7 +383,7 @@ function filterPolygons(polygons, fig1, fig2, mode) {
     if (
         ((mode === "intersect") && c1 && c2) || //intersection
         ((mode === "cut1") && c1 && !c2) ||     //fig1 - fig2
-        ((mode === "cut2") && !c1 && c2) ||     //fig2 - fig2
+        ((mode === "cut2") && !c1 && c2) ||     //fig2 - fig1
         ((mode === "sum") && (c1 || c2))) {     //fig1 + fig2      
       filtered.push(bigPolygons[i]);
     }
