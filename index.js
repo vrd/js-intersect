@@ -39,10 +39,57 @@ function drawPolygon(data, container, color) {
   container.appendChild(pol);
 }
 
+
+// function getScalingParameter(pols, viewport_width, viewport_height) {
+
+// }
+
+// function scalePolygon(pol, scaleCoef) {
+//   var new_pol = [];
+//   for (var i = 0; i < pol.length; i++) {
+//     new_pol.push({x: pol[i].x*scaleCoef, y: pol[i].y*scaleCoef});
+//   }
+//   return new_pol;
+// }
+
+function getMoveParameters(pols, viewport_height, viewport_width) {
+  var x_min = Infinity, x_max = -Infinity, y_min = Infinity, y_max = -Infinity; 
+  for (var i = 0; i < pols.length; i++) {
+    for (var j = 0; j < pols[i].length; j++) {
+      if (pols[i][j].x < x_min) x_min = pols[i][j].x;
+      if (pols[i][j].x > x_max) x_max = pols[i][j].x;
+      if (pols[i][j].y < y_min) y_min = pols[i][j].y;
+      if (pols[i][j].y > y_max) y_max = pols[i][j].y;
+    }
+  }
+  var center = {x:0,y:0};
+  center.x = (x_max + x_min)/2;
+  center.y = (y_max + y_min)/2;
+  var shift = {x:0,y:0};
+  shift.x = viewport_width/2 - center.x;
+  shift.y = viewport_height/2 - center.y;  
+  return shift;
+}
+
+function movePolygon(pol, shiftX, shiftY) {
+  var new_pol = [];
+  for (var i = 0; i < pol.length; i++) {
+    new_pol.push({x: pol[i].x+shiftX, y: pol[i].y+shiftY});
+  }
+  return new_pol;
+}
+
 function drawAllPolygons(pol1, pol2) {
+  // pols = [pol1, pol2];
+  // shift = getMoveParameters(pols, 500, 500);
+  // pol1 = movePolygon(pol1, shift.x, shift.y);
+  // pol2 = movePolygon(pol2, shift.x, shift.y);
   drawPolygon(pol1, document.querySelector('svg.base'), 'navy');
   drawPolygon(pol2, document.querySelector('svg.base'), 'yellow');
-  intersect(pol1, pol2).forEach(function (p) {
+  var pols = [];
+  pols =  intersect(pol1, pol2);
+  console.info("Found " + pols.length + " intersections");
+  pols.forEach(function (p) {
     drawPolygon(p, document.querySelector('svg.intersections'), 'red');
   });
 }

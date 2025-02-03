@@ -125,9 +125,9 @@ function findEdgeIntersection(edge1, edge2) {
   var y2 = edge1[1].y;
   var y3 = edge2[0].y;
   var y4 = edge2[1].y;
-  var nom1 = (x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3);
-  var nom2 = (x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3);
-  var denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+  var nom1 = +(((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)).toFixed(9));
+  var nom2 = +(((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)).toFixed(9));
+  var denom = +(((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1)).toFixed(9));
   var t1 = nom1 / denom;
   var t2 = nom2 / denom;
   var interPoints = [];
